@@ -132,7 +132,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Kapat
             </button>
-            <button type="button" class="btn btn-primary"  v-on:click="addCompany">Kaydet</button>
+            <button type="button" class="btn btn-primary"  v-on:click="addCompany(firma)">Kaydet</button>
           </div>
         </div>
       </div>
@@ -166,14 +166,14 @@
             )
             .catch((err) => console.log(err.message));
         },
-        addCompany() {
+        addCompany(data) {
           fetch(this.url + "api/Firma/Add", {
             method: "POST",
             body: JSON.stringify({
-              firmaAdi: this.firma.firmaAdi,
-              onayDurumu: this.firma.onayDurumu,
-              siparisIzinBasSaati: this.firma.siparisIzinBasSaati,
-              siparisIzinBitisSaati:this.firma.siparisIzinBitisSaati,
+              firmaAdi: data.firmaAdi,
+              onayDurumu: data.onayDurumu,
+              siparisIzinBasSaati: data.siparisIzinBasSaati,
+              siparisIzinBitisSaati:data.siparisIzinBitisSaati,
             }),
             headers: { "Content-type": "application/json; charset=UTF-8" },
           })
