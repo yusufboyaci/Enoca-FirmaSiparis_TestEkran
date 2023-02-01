@@ -121,9 +121,8 @@
             }),
             headers: { "Content-type": "application/json; charset=UTF-8" },
           })
-            .then((res) => res.json())
+            .then((res) => location.reload())
             .then((json) => {
-              location.reload()
             })
             .catch((err) => console.log(err));
         },
