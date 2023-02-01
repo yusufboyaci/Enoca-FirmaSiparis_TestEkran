@@ -96,8 +96,8 @@
             id: "",
             firmaAdi: "",
             onayDurumu: false,
-            siparisIzinBasTarihi: null,
-            siparisIzinBitisTarihi: null,
+            SiparisIzinBasSaati: null,
+            SiparisIzinBitisSaati: null,
           },
         };
       },
@@ -117,12 +117,14 @@
               firmaAdi: this.firma.firmaAdi,
               OnayDurumu: this.firma.onayDurumu,
               SiparisIzinBasSaati: this.firma.siparisIzinBasTarihi,
-              SiparisIzinBitisSaati:this.firma.SiparisIzinBitisSaati,
+              SiparisIzinBitisSaati:this.firma.siparisIzinBitisSaati,
             }),
             headers: { "Content-type": "application/json; charset=UTF-8" },
           })
             .then((res) => res.json())
-            .then((json) => console.log(json))
+            .then((json) => {
+              location.reload()
+            })
             .catch((err) => console.log(err));
         },
       },
