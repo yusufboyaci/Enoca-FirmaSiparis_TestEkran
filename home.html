@@ -7,6 +7,8 @@
   <title>Bootstrap demo</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
@@ -22,6 +24,7 @@
               <th scope="col">Onay Durumu</th>
               <th scope="col">Sipariş İzin Başlangıç Saati</th>
               <th scope="col">Sipariş İzin Bitiş Saati</th>
+              <th scope="col">İşlem</th>
             </tr>
           </thead>
           <tbody>
@@ -31,17 +34,70 @@
               <td>{{firma.onayDurumu}}</td>
               <td>{{firma.siparisIzinBasSaati}}</td>
               <td>{{firma.siparisIzinBitisSaati}}</td>
+              <td>
+                <button v-on:click="deleteCompany(firma)" type="button" class="btn btn-danger btn-sm"><span class="material-icons">
+                  delete
+                  </span></button>
+                <button v-on:click="getCompany(firma)" type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
+                  <span class="material-icons">
+                    edit
+                    </span>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
+
+  <!-- Update Modal -->
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Firma Güncelle
+          </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="firmaAdi" class="form-label">Firma Adı</label>
+              <input type="text" class="form-control" id="firmaAdi" v-model="firma.firmaAdi" />
+            </div>
+            <div class="mb-3">
+              <label for="SiparisIzinBasSaati" class="form-label">Sipariş İzin Başlangıç Saati</label>
+              <input type="time" class="form-control" id="SiparisIzinBasSaati" v-model="firma.siparisIzinBasSaati" />
+            </div>
+            <div class="mb-3">
+              <label for="SiparisIzinBitisSaati" class="form-label">Sipariş İzin Bitiş Saati</label>
+              <input type="time" class="form-control" id="SiparisIzinBitisSaati"
+                v-model="firma.siparisIzinBitisSaati" />
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="onayDurumu" v-model="firma.onayDurumu" />
+              <label class="form-check-label" for="onayDurumu">Onay Durumu</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Kapat
+          </button>
+          <button type="button" class="btn btn-primary"  v-on:click="addCompany">Kaydet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Firma Ekle
       </button>
     </div>
 
-    <!-- Modal -->
+    <!-- Add Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -59,12 +115,12 @@
               </div>
               <div class="mb-3">
                 <label for="SiparisIzinBasSaati" class="form-label">Sipariş İzin Başlangıç Saati</label>
-                <input type="time" class="form-control" id="SiparisIzinBasSaati" v-model="firma.siparisIzinBasTarihi" />
+                <input type="time" class="form-control" id="SiparisIzinBasSaati" v-model="firma.siparisIzinBasSaati" />
               </div>
               <div class="mb-3">
-                <label for="SiparisIzinBitisTarihi" class="form-label">Sipariş İzin Bitiş Saati</label>
-                <input type="time" class="form-control" id="SiparisIzinBitisTarihi"
-                  v-model="firma.siparisIzinBitisTarihi" />
+                <label for="SiparisIzinBitisSaati" class="form-label">Sipariş İzin Bitiş Saati</label>
+                <input type="time" class="form-control" id="SiparisIzinBitisSaati"
+                  v-model="firma.siparisIzinBitisSaati" />
               </div>
               <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="onayDurumu" v-model="firma.onayDurumu" />
@@ -96,8 +152,8 @@
             id: "",
             firmaAdi: "",
             onayDurumu: false,
-            SiparisIzinBasSaati: null,
-            SiparisIzinBitisSaati: null,
+            siparisIzinBasSaati: null,
+            siparisIzinBitisSaati: null,
           },
         };
       },
@@ -115,17 +171,38 @@
             method: "POST",
             body: JSON.stringify({
               firmaAdi: this.firma.firmaAdi,
-              OnayDurumu: this.firma.onayDurumu,
-              SiparisIzinBasSaati: this.firma.siparisIzinBasTarihi,
-              SiparisIzinBitisSaati:this.firma.siparisIzinBitisSaati,
+              onayDurumu: this.firma.onayDurumu,
+              siparisIzinBasSaati: this.firma.siparisIzinBasTarihi,
+              siparisIzinBitisSaati:this.firma.siparisIzinBitisSaati,
             }),
             headers: { "Content-type": "application/json; charset=UTF-8" },
           })
             .then((res) => location.reload())
-            .then((json) => {
-            })
             .catch((err) => console.log(err));
         },
+        getCompany(data){
+          console.log(data);
+          this.firma.id = data.id; 
+          this.firma.firmaAdi = data.firmaAdi; 
+          this.firma.onayDurumu = data.onayDurumu; 
+          this.firma.siparisIzinBasSaati = data.siparisIzinBasSaati; 
+          this.firma.siparisIzinBitisSaati = data.siparisIzinBitisSaati; 
+        },
+        deleteCompany(data){
+          fetch(this.url + "api/Firma/Delete", {
+            method: "DELETE",
+            body: JSON.stringify({
+              id: data.id,
+              firmaAdi: data.firmaAdi,
+              OnayDurumu: data.onayDurumu,
+              siparisIzinBasSaati: data.siparisIzinBasTarihi,
+              siparisIzinBitisSaati:data.siparisIzinBitisSaati,
+            }),
+            headers: { "Content-type": "application/json; charset=UTF-8" },
+          })
+            .then((res) => location.reload())
+            .catch((err) => console.log(err));
+        }
       },
       mounted() {
         this.getCompanies();
