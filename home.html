@@ -13,30 +13,80 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   </head>
   <body>
-    <div class="container" id="app">
-      <div class="table-responsive mt-5">
-        <table class="table table-striped table-hover table-bordered">
-          <thead class="table-light">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Firma Adı</th>
-              <th scope="col">Onay Durumu</th>
-              <th scope="col">Sipariş İzin Başlangıç Saati</th>
-              <th scope="col">Sipariş İzin Bitiş Saati</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(firma, index) in firmalar">
-              <th scope="row">{{index}}</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-          </tbody>
-        </table>
+    <div id="app">
+      <div class="container">
+        <div class="table-responsive mt-5">
+          <table class="table table-striped table-hover table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Firma Adı</th>
+                <th scope="col">Onay Durumu</th>
+                <th scope="col">Sipariş İzin Başlangıç Saati</th>
+                <th scope="col">Sipariş İzin Bitiş Saati</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(firma, index) in firmalar">
+                <th scope="row">{{index}}</th>
+                <td>{{firma.FirmaAdi}}</td>
+                <td>{{firma.OnayDurumu}}</td>
+                <td>{{firma.SiparisIzinBasSaati}}</td>
+                <td>{{firma.SiparisIzinBitisSaati}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+          <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+             Firma Ekle
+        </button>
+      </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Firma Ekle</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <form>
+          <div class="mb-3">
+            <label for="firmaAdi" class="form-label">Firma Adı</label>
+            <input type="text" class="form-control" id="firmaAdi" v-model="firma.firmaAdi">
+          </div>
+          <div class="mb-3">
+            <label for="SiparisIzinBasSaati" class="form-label">Sipariş İzin Başlangıç Saati</label>
+            <input type="time" class="form-control" id="SiparisIzinBasSaati" v-model="firma.siparisIzinBasTarihi">
+          </div>
+          {{firma.siparisIzinBasTarihi}}
+          <div class="mb-3">
+            <label for="SiparisIzinBitisTarihi" class="form-label">Sipariş İzin Bitiş Saati</label>
+            <input type="time" class="form-control" id="SiparisIzinBitisTarihi" v-model="firma.siparisIzinBitisTarihi">
+          </div>
+          {{firma.siparisIzinBitisTarihi}}
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="onayDurumu" v-model="firma.onayDurumu">
+            <label class="form-check-label" for="onayDurumu">Onay Durumu</label>
+          </div>
+          <button type="button" class="btn btn-primary">Ekle</button>
+        </form>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="button" class="btn btn-primary">Kaydet</button>
       </div>
     </div>
-
+  </div>
+</div>
+    </div>
+   
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
@@ -60,13 +110,15 @@
         },
         methods: {
           getCompanies() {
-            fetch(this.url)
+            fetch(this.url + 'api/Firma/List')
               .then((res) => res.json())
-              .then((data) => (this.firmalar = data))
+              .then((response) => {
+console.log(response)
+              })
               .catch((err) => console.log(err.message));
           },
           addCompany() {
-            fetch(this.url, {
+            fetch(this.url + 'api/Firma/Add', {
               method: "POST",
               body: JSON.stringify({
                 firmaAdi: this.firma.firmaAdi,
