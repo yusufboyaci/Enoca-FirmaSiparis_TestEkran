@@ -84,7 +84,7 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             Kapat
           </button>
-          <button type="button" class="btn btn-primary"  v-on:click="addCompany">Kaydet</button>
+          <button type="button" class="btn btn-primary"  v-on:click="updateCompany(firma)">Kaydet</button>
         </div>
       </div>
     </div>
@@ -172,7 +172,7 @@
             body: JSON.stringify({
               firmaAdi: this.firma.firmaAdi,
               onayDurumu: this.firma.onayDurumu,
-              siparisIzinBasSaati: this.firma.siparisIzinBasTarihi,
+              siparisIzinBasSaati: this.firma.siparisIzinBasSaati,
               siparisIzinBitisSaati:this.firma.siparisIzinBitisSaati,
             }),
             headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -181,7 +181,6 @@
             .catch((err) => console.log(err));
         },
         getCompany(data){
-          console.log(data);
           this.firma.id = data.id; 
           this.firma.firmaAdi = data.firmaAdi; 
           this.firma.onayDurumu = data.onayDurumu; 
@@ -195,7 +194,22 @@
               id: data.id,
               firmaAdi: data.firmaAdi,
               OnayDurumu: data.onayDurumu,
-              siparisIzinBasSaati: data.siparisIzinBasTarihi,
+              siparisIzinBasSaati: data.siparisIzinBasSaati,
+              siparisIzinBitisSaati:data.siparisIzinBitisSaati,
+            }),
+            headers: { "Content-type": "application/json; charset=UTF-8" },
+          })
+            .then((res) => location.reload())
+            .catch((err) => console.log(err));
+        },
+        updateCompany(data){
+          fetch(this.url + "api/Firma/Update", {
+            method: "PUT",
+            body: JSON.stringify({
+              id: data.id,
+              firmaAdi: data.firmaAdi,
+              OnayDurumu: data.onayDurumu,
+              siparisIzinBasSaati: data.siparisIzinBasSaati,
               siparisIzinBitisSaati:data.siparisIzinBitisSaati,
             }),
             headers: { "Content-type": "application/json; charset=UTF-8" },
