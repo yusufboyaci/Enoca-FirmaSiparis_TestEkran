@@ -41,7 +41,7 @@
             <div class="mb-3">
               <label for="firmaAdi" class="form-label">Firma</label>
               <select  v-model="urun.firmaId" class="form-select" id="firmaAdi">
-                <option v-bind:value="item.firmaId" v-for="item in firmalar">{{item.firmaAdi}}</option>
+                <option v-bind:value="firma.id" v-for="firma in firmalar">{{firma.firmaAdi}}</option>
               </select>
             </div>
             <div class="mb-3">
@@ -97,9 +97,9 @@
             fetch(this.url + "api/urun/add",{
               method: "POST",
               body: JSON.stringify({
-                firmaId: data.firmaId,
+                firmaId: this.urun.firmaId,
                 urunAdi: data.urunAdi,
-                stock: data.stock,
+                stok: data.stok,
                 fiyat: data.fiyat
               }),
               headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -113,10 +113,10 @@
             .then((data) => this.firmalar = data)
             .catch((err) => console.log(err.message));
         },
-
-
         },
-
+        mounted() {
+        this.getCompanies();
+      },
         }).mount("#app");
     </script>
   </body>
