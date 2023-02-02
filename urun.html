@@ -35,22 +35,23 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="firmaAdi" class="form-label">Firma Adı</label>
-              <input type="text" class="form-control" id="firmaAdi" v-model="firma.firmaAdi" />
+              <label for="firmaAdi" class="form-label">Ürün Adı</label>
+              <input type="text" class="form-control" id="firmaAdi" v-model="urun.urunAdi" />
             </div>
             <div class="mb-3">
-              <label for="SiparisIzinBasSaati" class="form-label">Sipariş İzin Başlangıç Saati</label>
-              <input type="time" class="form-control" id="SiparisIzinBasSaati" v-model="firma.siparisIzinBasSaati" />
+              <label for="firmaAdi" class="form-label">Firma</label>
+              <select  v-model="urun.firmaId" class="form-select" id="firmaAdi">
+                <option v-bind:value="item.firmaId" v-for="item in firmalar">{{item.firmaAdi}}</option>
+              </select>
             </div>
             <div class="mb-3">
-              <label for="SiparisIzinBitisSaati" class="form-label">Sipariş İzin Bitiş Saati</label>
-              <input type="time" class="form-control" id="SiparisIzinBitisSaati"
-                v-model="firma.siparisIzinBitisSaati" />
+              <label for="stok" class="form-label">Stok</label>
+              <input type="number" class="form-control" id="stok" v-model="urun.stok" />
             </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="onayDurumu" v-model="firma.onayDurumu" />
-              <label class="form-check-label" for="onayDurumu">Onay Durumu</label>
-            </div>
+            <div class="mb-3">
+              <label for="fiyat" class="form-label">Fiyat</label>
+              <input type="number" class="form-control" id="fiyat" v-model="urun.fiyat" />
+            </div>          
           </form>
         </div>
         <div class="modal-footer">
@@ -82,15 +83,41 @@
           return {
             url: "https://localhost:7110/",
             urunler: [],
+            firmalar: [],
             urun: {
               id: "",
               firmaId: "",
               urunAdi: "",
               stok: 0,
-              fiyat: 0.00,
+              fiyat: 0.00
             }
           }
         },
+        methods: {
+          addProduct(data){
+            fetch(this.url + "api/urun/add",{
+              method: "POST",
+              body: JSON.stringify({
+                firmaId: data.firmaId,
+                urunAdi: data.urunAdi,
+                stock: data.stock,
+                fiyat: data.fiyat
+              }),
+              headers: { "Content-type": "application/json; charset=UTF-8" },
+            })
+            .then(res => location.reload())
+            .catch(err => console.log(err));
+          },
+          getCompanies() {
+          fetch(this.url + "api/Firma/List")
+            .then((res) => res.json())
+            .then((data) => this.firmalar = data)
+            .catch((err) => console.log(err.message));
+        },
+
+
+        },
+
         }).mount("#app");
     </script>
   </body>

@@ -159,9 +159,7 @@
         getCompanies() {
           fetch(this.url + "api/Firma/List")
             .then((res) => res.json())
-            .then(
-              (data) => this.firmalar = data
-            )
+            .then((data) => this.firmalar = data)
             .catch((err) => console.log(err.message));
         },
         addCompany(data) {
