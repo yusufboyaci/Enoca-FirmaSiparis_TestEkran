@@ -1,124 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sipariş</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-      crossorigin="anonymous"
-    />
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  </head>
-  <body>
-    <div id="app">
 
- <!-- Button trigger modal -->
- <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Ürün Ekle
-</button>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sipariş</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
 
+<body>
+  <div id="app">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Sipariş Ekle
+    </button>
 
- <!-- Add Modal -->
- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Ürün Ekle
-        </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="siparisiVereninAdi" class="form-label">Siparişi Verenin Adı</label>
-            <input type="text" class="form-control" id="siparisiVereninAdi" v-model="siparis.siparisiVereninAdi" />
+    <!-- Add Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Sipariş Ekle
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="mb-3">
-            <label for="firmaAdi" class="form-label">Firma</label>
-            <select  v-model="siparis.firmaId" class="form-select" id="firmaAdi">
-              <option v-bind:value="firma.id" v-for="firma in firmalar">{{firma.firmaAdi}}</option>
-            </select>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="siparisiVereninAdi" class="form-label">Siparişi Verenin Adı</label>
+                <input type="text" class="form-control" id="siparisiVereninAdi" v-model="siparis.siparisiVereninAdi" />
+              </div>
+              <div class="mb-3">
+                <label for="firmaAdi" class="form-label">Firma</label>
+                <select v-model="siparis.firmaId" class="form-select" id="firmaAdi">
+                  <option v-bind:value="firma.id" v-for="firma in firmalar">
+                    {{firma.firmaAdi}}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="urunAdi" class="form-label">Urun</label>
+                <select v-model="siparis.urunId" class="form-select" id="urunAdi">
+                  <option v-bind:value="urun.id" v-for="urun in listProductsByCompany">
+                    {{urun.urunAdi}}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="siparisTarihi" class="form-label">Sipariş Tarihi</label>
+                <input type="datetime-local" class="form-control" id="siparisTarihi" v-model="siparis.siparisTarihi" />
+              </div>
+            </form>
           </div>
-          <div class="mb-3">
-            <label for="urunAdi" class="form-label">Urun</label>
-            <select  v-model="siparis.urunId" class="form-select" id="urunAdi">
-              <option v-bind:value="urun.id" v-for="urun in urunler">{{urun.urunAdi}}</option>
-            </select>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Kapat
+            </button>
+            <button type="button" class="btn btn-primary" v-on:click="addSiparis(urun)">
+              Kaydet
+            </button>
           </div>
-          <div class="mb-3">
-            <label for="siparisTarihi" class="form-label">Sipariş Tarihi</label>
-            <input type="datetime-local" class="form-control" id="siparisTarihi" v-model="siparis.siparisTarihi" />
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Kapat
-        </button>
-        <button type="button" class="btn btn-primary"  v-on:click="addSiparis(urun)">Kaydet</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-    </div>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-      crossorigin="anonymous"
-    ></script>
-    <script>
-      const { createApp } = Vue;
-      createApp({
-        data() {
-          return {
-            urunler: [],
-            firmalar: [],
-            siparis:{
-                id: "",
-                firmaId: "",
-                urunId: "",
-                siparisiVereninAdi: "",
-                siparisTarihi: ""
-            }
-          };
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          url: "https://localhost:7110/",
+          urunler: [],
+          firmalar: [],
+          siparis: {
+            id: "",
+            firmaId: "",
+            urunId: "",
+            siparisiVereninAdi: "",
+            siparisTarihi: "",
+          },
+        };
+      },
+      methods: {
+        addSiparis(data) {
+          fetch(this.url + "api/siparis/add", {
+            method: "POST",
+            body: JSON.stringify({
+              firmaId: this.siparis.firmaId,
+              urunId: this.siparis.urunId,
+              siparisiVereninAdi: data.siparisiVereninAdi,
+              siparisTarihi: data.siparisTarihi,
+            }),
+            headers: { "Content-type": "application/json; charset=UTF-8" },
+          })
+            .then((res) => location.reload())
+            .catch((err) => console.log(err));
         },
-        methods: {
-            addSiparis(data){
-            fetch(this.url + "api/siparis/add",{
-              method: "POST",
-              body: JSON.stringify({
-                firmaId: this.siparis.firmaId,
-                urunId: this.siparis.urunId,
-                siparisiVereninAdi: data.siparisiVereninAdi,
-                siparisTarihi: data.siparisTarihi
-              }),
-              headers: { "Content-type": "application/json; charset=UTF-8" },
-            })
-            .then(res => location.reload())
-            .catch(err => console.log(err));
-          },
-          getCompanies() {
-            fetch(this.url + "api/Firma/List")
-              .then((res) => res.json())
-              .then((data) => (this.firmalar = data))
-              .catch((err) => console.log(err.message));
-          },
-          getProducts() {
-            fetch(this.url + "api/Urun/List")
-              .then((res) => res.json())
-              .then((data) => (this.urunler = data))
-              .catch((err) => console.log(err.message));
-          },
+        getCompanies() {
+          fetch(this.url + "api/Firma/List")
+            .then((res) => res.json())
+            .then((data) => (this.firmalar = data))
+            .catch((err) => console.log(err.message));
         },
-        beforeMount(){
-          this.getCompanies();
-          this.getProducts();
-        }
-      }).mount("#app");
-    </script>
-  </body>
+        getProducts() {
+          fetch(this.url + "api/Urun/List")
+            .then((res) => res.json())
+            .then((data) => (this.urunler = data))
+            .catch((err) => console.log(err.message));
+        },
+      },
+      computed: {
+        listProductsByCompany() {
+          let urunListesi = this.urunler.filter((x) => x.firmaId === this.siparis.firmaId);
+          console.log(urunListesi);
+          return urunListesi;
+        },
+      },
+      beforeMount() {
+        this.getCompanies();
+        this.getProducts();
+      },
+    }).mount("#app");
+  </script>
+</body>
+
 </html>
