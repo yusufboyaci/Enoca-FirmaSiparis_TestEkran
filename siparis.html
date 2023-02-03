@@ -117,9 +117,7 @@
       },
       computed: {
         listProductsByCompany() {
-          let urunListesi = this.urunler.filter((x) => x.firmaId === this.siparis.firmaId);
-          console.log(urunListesi);
-          return urunListesi;
+          return this.urunler.filter((x) => x.firmaId === this.siparis.firmaId);
         },
       },
       beforeMount() {
